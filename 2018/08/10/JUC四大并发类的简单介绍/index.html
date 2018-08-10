@@ -84,7 +84,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="JVM," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -102,23 +102,20 @@
 
 
 
-<meta name="description" content="本文介绍了一次生产环境的JVM GC相关参数的调优过程，通过参数的调整避免了GC卡顿对JAVA服务成功率的影响。 这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：Java服务GC参数调优案例，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。 背景以及遇到的问题我们的Ja">
-<meta name="keywords" content="JVM">
+<meta name="description" content="有人在群里问JUC的四大并发类该怎么用？记不住怎么办？于是乎本着复习加导学的目的写了简单的用例，在此记录一下 CountDownLatchCountDownLatch一般用于主线程等待所有子线程执行完毕的场景，比如：老师要等所有的小朋友集合了才带他们回教室。下面是个例子：1234567891011121314151617181920212223242526272829303132333435363">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm(6):Java服务GC参数调优案例">
-<meta property="og:url" content="https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/index.html">
+<meta property="og:title" content="JUC四大并发类的简单介绍">
+<meta property="og:url" content="https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/index.html">
 <meta property="og:site_name" content="Kaithmy&#39;s blog">
-<meta property="og:description" content="本文介绍了一次生产环境的JVM GC相关参数的调优过程，通过参数的调整避免了GC卡顿对JAVA服务成功率的影响。 这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：Java服务GC参数调优案例，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。 背景以及遇到的问题我们的Ja">
+<meta property="og:description" content="有人在群里问JUC的四大并发类该怎么用？记不住怎么办？于是乎本着复习加导学的目的写了简单的用例，在此记录一下 CountDownLatchCountDownLatch一般用于主线程等待所有子线程执行完毕的场景，比如：老师要等所有的小朋友集合了才带他们回教室。下面是个例子：1234567891011121314151617181920212223242526272829303132333435363">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://faithlove.github.io/pic/2017/jvm/articlex.png">
-<meta property="og:image" content="https://faithlove.github.io/pic/2017/jvm/articlex_VisualVM.png">
-<meta property="og:image" content="https://faithlove.github.io/pic/2017/jvm/end1.png">
-<meta property="og:image" content="https://faithlove.github.io/pic/2017/jvm/end2.png">
-<meta property="og:updated_time" content="2017-10-27T05:24:18.881Z">
+<meta property="og:image" content="https://faithlove.github.io/pic/2018/HexoTLS/topPicPre.jpg">
+<meta property="og:updated_time" content="2018-08-10T09:58:10.771Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm(6):Java服务GC参数调优案例">
-<meta name="twitter:description" content="本文介绍了一次生产环境的JVM GC相关参数的调优过程，通过参数的调整避免了GC卡顿对JAVA服务成功率的影响。 这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：Java服务GC参数调优案例，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。 背景以及遇到的问题我们的Ja">
-<meta name="twitter:image" content="https://faithlove.github.io/pic/2017/jvm/articlex.png">
+<meta name="twitter:title" content="JUC四大并发类的简单介绍">
+<meta name="twitter:description" content="有人在群里问JUC的四大并发类该怎么用？记不住怎么办？于是乎本着复习加导学的目的写了简单的用例，在此记录一下 CountDownLatchCountDownLatch一般用于主线程等待所有子线程执行完毕的场景，比如：老师要等所有的小朋友集合了才带他们回教室。下面是个例子：1234567891011121314151617181920212223242526272829303132333435363">
+<meta name="twitter:image" content="https://faithlove.github.io/pic/2018/HexoTLS/topPicPre.jpg">
 
 
 
@@ -146,13 +143,13 @@
 
 
 
-  <link rel="canonical" href="https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/"/>
+  <link rel="canonical" href="https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/"/>
 
 
 
 
 
-  <title>jvm(6):Java服务GC参数调优案例 | Kaithmy's blog</title>
+  <title>JUC四大并发类的简单介绍 | Kaithmy's blog</title>
   
 
 
@@ -354,7 +351,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/">
+    <link itemprop="mainEntityOfPage" href="https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Kaithmy">
@@ -371,7 +368,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">jvm(6):Java服务GC参数调优案例</h2>
+          <h2 class="post-title" itemprop="name headline">JUC四大并发类的简单介绍</h2>
         
 
         <div class="post-meta">
@@ -383,8 +380,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T13:15:58+08:00">
-                2017-10-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-10T16:58:18+08:00">
+                2018-08-10
               </time>
             
 
@@ -406,8 +403,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/JVM/" itemprop="url" rel="index">
-                    <span itemprop="name">JVM</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -424,9 +421,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/27/jvm-6-Java服务GC参数调优案例/#comments" itemprop="discussionUrl">
+                <a href="/2018/08/10/JUC四大并发类的简单介绍/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/27/jvm-6-Java服务GC参数调优案例/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/08/10/JUC四大并发类的简单介绍/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -434,7 +431,7 @@
 
           
           
-             <span id="/2017/10/27/jvm-6-Java服务GC参数调优案例/" class="leancloud_visitors" data-flag-title="jvm(6):Java服务GC参数调优案例">
+             <span id="/2018/08/10/JUC四大并发类的简单介绍/" class="leancloud_visitors" data-flag-title="JUC四大并发类的简单介绍">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -464,7 +461,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,855
+                  1,596
                 </span>
               
 
@@ -496,32 +493,34 @@
 
       
       
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="https://faithlove.github.io/pic/2018/HexoTLS/topPicPre.jpg" rel="gallery_cjkntjjq7000cdkw4cxicfqoq"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="https://faithlove.github.io/pic/2018/HexoTLS/topPicPre.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
 
       
-        <p>本文介绍了一次生产环境的JVM GC相关参数的调优过程，通过参数的调整避免了GC卡顿对JAVA服务成功率的影响。</p>
-<p>这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：<a href="https://segmentfault.com/a/1190000005174819" target="_blank" rel="noopener">Java服务GC参数调优案例</a>，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。</p>
-<h2 id="背景以及遇到的问题"><a href="#背景以及遇到的问题" class="headerlink" title="背景以及遇到的问题"></a>背景以及遇到的问题</h2><p>我们的Java HTTP服务属于OLTP类型，对成功率和响应时间的要求比较高，在生产环境中出现偶现的成功率突然下降然后又自动恢复的情况，如图所示：</p>
-<p><img src="https://faithlove.github.io/pic/2017/jvm/articlex.png" alt=""></p>
-<p>JVM和GC相关的参数如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">-Xmx22528m</span><br><span class="line">-Xms22528m</span><br><span class="line">-XX:NewRatio=2</span><br><span class="line">-XX:+UseConcMarkSweepGC</span><br><span class="line">-XX:+UseParNewGC</span><br><span class="line">-XX:+CMSParallelRemarkEnabled</span><br></pre></td></tr></table></figure>
-<p>总结来说，由于服务中大量使用了Cache，所以堆大小开到了22G。GC算法使用CMS（UseConcMarkSweepGC），开启了降低标记停顿（CMSParallelRemarkEnabled），设置年轻代为并行收集（UseParNewGC），年轻代和老年代的比例为1:2 （NewRatio＝2）.</p>
-<p>JVM GC日志相关的参数如下：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">-Xloggc:/data/gc.log</span><br><span class="line">-XX:GCLogFileSize=10M</span><br><span class="line">-XX:NumberOfGCLogFiles=10</span><br><span class="line">-XX:+UseGCLogFileRotation</span><br><span class="line">-XX:+PrintGCDateStamps</span><br><span class="line">-XX:+PrintGCTimeStamps</span><br><span class="line">-XX:+PrintGCDetails</span><br><span class="line">-XX:+DisableExplicitGC</span><br><span class="line">-verbose:gc</span><br></pre></td></tr></table></figure>
-<h2 id="问题解决过程"><a href="#问题解决过程" class="headerlink" title="问题解决过程"></a>问题解决过程</h2><h3 id="排除应用程序的内存使用问题"><a href="#排除应用程序的内存使用问题" class="headerlink" title="排除应用程序的内存使用问题"></a>排除应用程序的内存使用问题</h3><p>首先使用jmap查看内存使用情况：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -histo:live PID</span><br></pre></td></tr></table></figure>
-<p>这个命令把程序中当前的对象按照个数和占用的空间排序以后打印出来。这里没有发现使用异常的对象。</p>
-<h3 id="排除Cache内容过多的问题"><a href="#排除Cache内容过多的问题" class="headerlink" title="排除Cache内容过多的问题"></a>排除Cache内容过多的问题</h3><p>如果Cache内容过多也会导致JVM老年代容易被用满导致频繁GC，因此调出GC日志进行查看，发现每次GC以后内存使用一般是从20G降低到5G左右，因此常驻内存的Cache不是导致GC长时间卡顿的根本原因。对于GC LOG的查看有多种方式，使用VisualVM比较直观，需要使用VisualGC：</p>
-<p><img src="https://faithlove.github.io/pic/2017/jvm/articlex_VisualVM.png" alt=""></p>
-<p>从图中我们可以看到伊甸园和老年代的空间分配，由于整体内存是20G，设置 -XX:NewRatio=2 因此老年代是14G，伊甸园＋S0+S1=7G</p>
-<h3 id="调整GC时间点（成功率抖动问题加重）"><a href="#调整GC时间点（成功率抖动问题加重）" class="headerlink" title="调整GC时间点（成功率抖动问题加重）"></a>调整GC时间点（成功率抖动问题加重）</h3><p>如果GC需要处理的内存量比较大，执行的时间也就比较长，STW （Stop the World）时间也就更长。按照这个思路调整CMS启动的时间点，希望提早GC，也就是让GC变得更加频繁但是期望每次执行的时间较少。添加了下面这两个参数：</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-XX:+UseCMSInitiatingOccupancyOnly</span><br><span class="line">-XX:CMSInitiatingOccupancyFraction=50</span><br></pre></td></tr></table></figure>
-<p>意思是说在Old区使用了50%的时候触发GC。实验后发现GC的频率有所增加，但是每次GC造成的陈功率降低现象并没有减弱，因此弃用这两个参数。</p>
-<h3 id="调整对象在年轻代内存中驻留的时间（效果不明显）"><a href="#调整对象在年轻代内存中驻留的时间（效果不明显）" class="headerlink" title="调整对象在年轻代内存中驻留的时间（效果不明显）"></a>调整对象在年轻代内存中驻留的时间（效果不明显）</h3><p>如果能够降低老年代GC的频率也可以达到降低GC影响的目的，因此尝试让对象在年轻代内存中进行更长时间的驻留，提升这些对象在年轻代GC时候被销毁的概率。使用参数<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&gt; 备注：  </span><br><span class="line">&gt; 1、MaxTenuringThreshold 在1.5.0_05之前最大值可以设置为31 ，1.5.0_06以后最大值可以设置为15，超过15会被认为无限大。参考：[Never set GC parameter -XX:MaxTenuringThreshold greater than 15](https://sourcevirtues.com/2013/03/29/never-set-gc-parameter-maxtenuringthreshold-greater-than-15/)  </span><br><span class="line">&gt; 2、提升年轻代GC被销毁的概率，只是调整这个参数效果不大，第二次age的值会重新计算，参考：[说说MaxTenuringThreshold这个参数](http://bluedavy.me/?p=70)  </span><br><span class="line"></span><br><span class="line">### CMS-Remark之前强制进行年轻代的GC</span><br><span class="line"></span><br><span class="line">首先补充一下CMS的相关知识，在CMS整个过程中有两个步骤是STW的，如图红色部分：</span><br><span class="line"></span><br><span class="line">![](https://faithlove.github.io/pic/2017/jvm/articlex_cms.png)</span><br><span class="line"></span><br><span class="line">CMS并非没有暂停，而是用两次短暂停来替代串行标记整理算法的长暂停，它的收集周期是这样：</span><br><span class="line"></span><br><span class="line">- 1、初始标记(CMS-initial-mark),从root对象开始标记存活的对象</span><br><span class="line">- 2、并发标记(CMS-concurrent-mark)</span><br><span class="line">- 3、重新标记(CMS-remark),暂停所有应用程序线程，重新标记并发标记阶段遗漏的对象（在并发标记阶段结束后对象状态的更新导致）</span><br><span class="line">- 4、并发清除(CMS-concurrent-sweep)</span><br><span class="line">- 5、并发重设状态等待下次CMS的触发(CMS-concurrent-reset)。</span><br><span class="line"></span><br><span class="line">通过GC日志和成功率下降的时间点进行比对发现并不是每一次老年代GC都会导致成功率的下降，但是从中发现了一个规律：</span><br><span class="line"></span><br><span class="line">![](https://faithlove.github.io/pic/2017/jvm/cms_gc1.png)</span><br><span class="line"></span><br><span class="line">前两次GC CMS-Remark过程在4s左右造成了成功率的下降，但是第三次GC并没有对成功率造成明显的影响,CMS-Remark只有0.18s。Java HTTP 服务是通过Nginx进行反向代理的，nginx设置的超时时间是3s，所以如果GC卡顿在3s以内就不会对成功率造成太大的影响。</span><br><span class="line"></span><br><span class="line">从GC日志中又发现一个信息：</span><br><span class="line"></span><br><span class="line">![](https://faithlove.github.io/pic/2017/jvm/cms_gc2.png)</span><br><span class="line"></span><br><span class="line">在文档和相关资料中没有找到蓝色部分的含义，猜测是remark处理的内存量，处理的越多就越慢。添加下面两个参数强制在remark阶段和FULL GC阶段之前先在进行一次年轻代的GC，这样需要进行处理的内存量就不会太多。</span><br><span class="line"></span><br><span class="line">&gt; 备注：  </span><br><span class="line">&gt; 1、蓝色部分的含义：remark标记需要清理对象的容量。关于如何分析CMS日志，可以参考这篇文章：[了解 CMS 垃圾回收日志](http://ifeve.com/jvm-cms-log/)  </span><br><span class="line">&gt; 2、FULL GC阶段之前先在进行一次年轻代的GC的意义是：Yong区对象引用了Old区的对象，如果在Old区进行清理之前不进行Yong区清理，就会导致Old区被yong区引用的对象无法释放。可以参考这篇文章：[假笨说-又抓了一个导致频繁GC的鬼--数组动态扩容](http://mp.weixin.qq.com/s/HKdpmmvJKq45QZdV4Q2cYQ)  </span><br><span class="line"></span><br><span class="line">```  sh</span><br><span class="line">-XX:+ScavengeBeforeFullGC </span><br><span class="line">-XX:+CMSScavengeBeforeRemark</span><br></pre></td></tr></table></figure></p>
-<p>调优以后效果很明显，下面是两台配置完全相同的服务器在同一时间段的成功率和响应时间监控图，第一个没有添加强制年轻代GC的参数。</p>
-<p><img src="https://faithlove.github.io/pic/2017/jvm/end1.png" alt=""><br><img src="https://faithlove.github.io/pic/2017/jvm/end2.png" alt=""></p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>1、在CMS-remark阶段需要对堆中所有的内存对象进行处理，如果在这个阶段之前强制执行一次年轻代的GC会大量减少remark需要处理的内存数量，进而降低JVM卡顿对成功率的影响。<br>2、对于Java HTTP服务，JVM的卡顿时间应该小于HTTP客户端的调用超时时间，否则JVM卡顿会对成功率造成影响。</p>
-<p><strong>感谢<a href="http://www.jianshu.com/u/3def157aab07" target="_blank" rel="noopener">匠心零度</a>对文章内容进行深入的探讨，备注内容属于讨论后的结果</strong></p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://blog.csdn.net/historyasamirror/article/details/6245157" target="_blank" rel="noopener">JVM调优：选择合适的GC collector （三）</a><br><a href="https://blogs.oracle.com/poonam/entry/understanding_cms_gc_logs" target="_blank" rel="noopener">Understanding CMS GC Logs</a><br><a href="http://blog.sokolenko.me/2014/11/javavm-options-production.html" target="_blank" rel="noopener">Java VM Options You Should Always Use in Production</a>  </p>
+        <p>有人在群里问JUC的四大并发类该怎么用？记不住怎么办？于是乎本着复习加导学的目的写了简单的用例，在此记录一下</p>
+<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><p>CountDownLatch一般用于主线程等待所有子线程执行完毕的场景，比如：老师要等所有的小朋友集合了才带他们回教室。<br>下面是个例子：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Concurrent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingDeque</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * describe: CountDownLatch 示例</span></span><br><span class="line"><span class="comment"> * author: kaithmy</span></span><br><span class="line"><span class="comment"> * date: 2018/8/10  17:03</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> threadPoolExecutor = ThreadPoolExecutor(<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>,</span><br><span class="line">            TimeUnit.SECONDS, LinkedBlockingDeque())</span><br><span class="line"></span><br><span class="line">    <span class="comment">//队伍总共5个位置</span></span><br><span class="line">    <span class="keyword">val</span> countDownLatch = CountDownLatch(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    println(<span class="string">"老师: <span class="subst">$&#123;Thread.currentThread().name&#125;</span> 孩子们，该集合啦！ "</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//总共5个小朋友</span></span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.5</span>) &#123;</span><br><span class="line">        threadPoolExecutor.execute &#123;</span><br><span class="line">            println(<span class="string">"小朋友: <span class="subst">$&#123;Thread.currentThread().name&#125;</span> 我来啦！奔跑ing"</span>)</span><br><span class="line">            Thread.sleep((i * <span class="number">1000</span>).toLong())</span><br><span class="line">            println(<span class="string">"小朋友: <span class="subst">$&#123;Thread.currentThread().name&#125;</span> 到位！yeah！ "</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment">//占用一个队伍位置</span></span><br><span class="line">            countDownLatch.countDown()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//等待队伍位置被占满</span></span><br><span class="line">    countDownLatch.await()</span><br><span class="line"></span><br><span class="line">    <span class="comment">//队伍位置满了就回教室啦</span></span><br><span class="line">    println(<span class="string">"老师: <span class="subst">$&#123;Thread.currentThread().name&#125;</span> 既然都到了，那我们回教室吧！ "</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">老师: main 孩子们，该集合啦！ </span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-1</span> 我来啦！奔跑ing</span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-2</span> 我来啦！奔跑ing</span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-3</span> 我来啦！奔跑ing</span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-4</span> 我来啦！奔跑ing</span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-5</span> 我来啦！奔跑ing</span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-1</span> 到位！yeah！ </span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-2</span> 到位！yeah！ </span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-3</span> 到位！yeah！ </span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-4</span> 到位！yeah！ </span><br><span class="line">小朋友: pool<span class="number">-1</span>-thread<span class="number">-5</span> 到位！yeah！ </span><br><span class="line">老师: main 既然都到了，那我们回教室吧！</span><br></pre></td></tr></table></figure></p>
+<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><p>CyclicBarrier一般用于子线程间等待，就绪后再同时执行，具体执行顺序由CPU进行调度，比如：老师举行一次吃零食大赛，要等5位选手到齐了才能开始比赛。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Concurrent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.*</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * describe: CyclicBarrier 示例</span></span><br><span class="line"><span class="comment"> * author: kaithmy</span></span><br><span class="line"><span class="comment"> * date: 2018/8/7  14:59</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> threadPoolExecutor = ThreadPoolExecutor(<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>,</span><br><span class="line">            TimeUnit.SECONDS, LinkedBlockingDeque())</span><br><span class="line"></span><br><span class="line">    <span class="comment">//总共5个比赛名额</span></span><br><span class="line">    <span class="keyword">val</span> cyclicBarrier = CyclicBarrier(<span class="number">5</span>, Runnable &#123;</span><br><span class="line">        println(<span class="string">"老师: 人到齐了，比赛开始！"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//总共5个小朋友参赛</span></span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.5</span>) &#123;</span><br><span class="line">        threadPoolExecutor.execute &#123;</span><br><span class="line">            println(<span class="string">"小朋友<span class="variable">$i</span>:我准备好啦！"</span>)</span><br><span class="line">            <span class="comment">//等待其他小朋友到场</span></span><br><span class="line">            cyclicBarrier.await()</span><br><span class="line"></span><br><span class="line">            println(<span class="string">"小朋友<span class="variable">$i</span>:我开始吃了！"</span>)</span><br><span class="line">            <span class="comment">//模拟吃饭时长</span></span><br><span class="line">            Thread.sleep((i * <span class="number">1000</span>).toLong())</span><br><span class="line">            println(<span class="string">"小朋友<span class="variable">$i</span>:我吃完了！"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">小朋友<span class="number">2</span>:我准备好啦！</span><br><span class="line">小朋友<span class="number">3</span>:我准备好啦！</span><br><span class="line">小朋友<span class="number">1</span>:我准备好啦！</span><br><span class="line">小朋友<span class="number">4</span>:我准备好啦！</span><br><span class="line">小朋友<span class="number">5</span>:我准备好啦！</span><br><span class="line">老师: 人到齐了，比赛开始！</span><br><span class="line">小朋友<span class="number">5</span>:我开始吃了！</span><br><span class="line">小朋友<span class="number">2</span>:我开始吃了！</span><br><span class="line">小朋友<span class="number">1</span>:我开始吃了！</span><br><span class="line">小朋友<span class="number">3</span>:我开始吃了！</span><br><span class="line">小朋友<span class="number">4</span>:我开始吃了！</span><br><span class="line">小朋友<span class="number">1</span>:我吃完了！</span><br><span class="line">小朋友<span class="number">2</span>:我吃完了！</span><br><span class="line">小朋友<span class="number">3</span>:我吃完了！</span><br><span class="line">小朋友<span class="number">4</span>:我吃完了！</span><br><span class="line">小朋友<span class="number">5</span>:我吃完了！</span><br></pre></td></tr></table></figure></p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>Future适用于需要即时获取子线程的执行结果的情况，可在获取结果时设置超时时间控制获取结果的时机，以免阻塞。<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Concurrent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Callable</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingDeque</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * describe: Future 示例</span></span><br><span class="line"><span class="comment"> * author: kaithmy</span></span><br><span class="line"><span class="comment"> * date: 2018/8/10  15:35</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> threadPoolExecutor = ThreadPoolExecutor(<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>,</span><br><span class="line">            TimeUnit.SECONDS, LinkedBlockingDeque())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.5</span>) &#123;</span><br><span class="line">        <span class="comment">//提交callable并获取future对象</span></span><br><span class="line">        <span class="keyword">val</span> future = threadPoolExecutor.submit(MyFutureTask(i.toString(), i))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//通过future获取执行结果，并设置超时时间为2s</span></span><br><span class="line">            <span class="keyword">val</span> result = future.<span class="keyword">get</span>(<span class="number">2</span>, TimeUnit.SECONDS)</span><br><span class="line">            println(<span class="string">"Thread <span class="variable">$i</span> ：拿到结果啦！是 <span class="variable">$result</span> 哦"</span>)</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">            println(<span class="string">"Thread <span class="variable">$i</span> ：超时了呢，<span class="variable">$e</span> "</span>)</span><br><span class="line">            <span class="comment">//超时取消</span></span><br><span class="line">            future.cancel(<span class="literal">true</span>)</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyFutureTask</span></span>(<span class="keyword">var</span> name: String, <span class="keyword">var</span> second: <span class="built_in">Int</span>) : Callable&lt;<span class="built_in">Int</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">call</span><span class="params">()</span></span>: <span class="built_in">Int</span> &#123;</span><br><span class="line">        println(<span class="string">"子线程：<span class="variable">$name</span> 开始"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//模拟耗时操作</span></span><br><span class="line">        Thread.sleep((second * <span class="number">1000</span>).toLong())</span><br><span class="line"></span><br><span class="line">        println(<span class="string">"子线程：<span class="variable">$name</span> 结束，耗时：<span class="variable">$second</span> 秒"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">//返回执行结果</span></span><br><span class="line">        <span class="keyword">return</span> second</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">子线程：<span class="number">1</span> 开始</span><br><span class="line">子线程：<span class="number">1</span> 结束，耗时：<span class="number">1</span> 秒</span><br><span class="line">Thread <span class="number">1</span> ：拿到结果啦！是 <span class="number">1</span> 哦</span><br><span class="line">子线程：<span class="number">2</span> 开始</span><br><span class="line">子线程：<span class="number">2</span> 结束，耗时：<span class="number">2</span> 秒</span><br><span class="line">Thread <span class="number">2</span> ：拿到结果啦！是 <span class="number">2</span> 哦</span><br><span class="line">子线程：<span class="number">3</span> 开始</span><br><span class="line">Thread <span class="number">3</span> ：超时了呢，java.util.concurrent.TimeoutException </span><br><span class="line">子线程：<span class="number">4</span> 开始</span><br><span class="line">Thread <span class="number">4</span> ：超时了呢，java.util.concurrent.TimeoutException </span><br><span class="line">子线程：<span class="number">5</span> 开始</span><br><span class="line">Thread <span class="number">5</span> ：超时了呢，java.util.concurrent.TimeoutException</span><br></pre></td></tr></table></figure></p>
+<h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><p>Semaphore通常用于子线程间争夺临界资源的场景，所以他们需要申请使用，并在使用完之后释放<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> Concurrent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.LinkedBlockingDeque</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.Semaphore</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ThreadPoolExecutor</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * describe: Semaphore 示例</span></span><br><span class="line"><span class="comment"> * author: kaithmy</span></span><br><span class="line"><span class="comment"> * date: 2018/8/10  16:27</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">main</span><span class="params">(args: <span class="type">Array</span>&lt;<span class="type">String</span>&gt;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">val</span> threadPoolExecutor = ThreadPoolExecutor(<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>,</span><br><span class="line">            TimeUnit.SECONDS, LinkedBlockingDeque())</span><br><span class="line"></span><br><span class="line">    <span class="comment">//总共有3支笔</span></span><br><span class="line">    <span class="keyword">val</span> semaphore = Semaphore(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">//总共5位同学</span></span><br><span class="line">    <span class="keyword">for</span> (i <span class="keyword">in</span> <span class="number">1.</span><span class="number">.5</span>) &#123;</span><br><span class="line">        threadPoolExecutor.execute(SemaphoreThread(i.toString(), semaphore))</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SemaphoreThread</span></span>(<span class="keyword">var</span> name: String, <span class="keyword">var</span> semaphore: Semaphore) : Runnable &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">run</span><span class="params">()</span></span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//向老师请求一支笔</span></span><br><span class="line">            semaphore.acquire()</span><br><span class="line">            println(<span class="string">"Thread <span class="variable">$name</span> 占用ing"</span>)</span><br><span class="line">            <span class="comment">//得到笔后签名</span></span><br><span class="line">            Thread.sleep(<span class="number">3</span> * <span class="number">1000</span>L)</span><br><span class="line">            println(<span class="string">"Thread <span class="variable">$name</span> 占用3 秒后释放"</span>)</span><br><span class="line">            <span class="comment">//将笔还给老师</span></span><br><span class="line">            semaphore.release()</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e: Exception) &#123;</span><br><span class="line">            <span class="comment">//这里是意外情况哦</span></span><br><span class="line">            println(<span class="string">"Thread <span class="variable">$name</span> 出错啦，<span class="variable">$e</span>"</span>)</span><br><span class="line">            semaphore.release()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>执行结果如下：<br><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Thread <span class="number">1</span> 占用ing</span><br><span class="line">Thread <span class="number">3</span> 占用ing</span><br><span class="line">Thread <span class="number">2</span> 占用ing</span><br><span class="line">Thread <span class="number">1</span> 占用<span class="number">3</span> 秒后释放</span><br><span class="line">Thread <span class="number">2</span> 占用<span class="number">3</span> 秒后释放</span><br><span class="line">Thread <span class="number">3</span> 占用<span class="number">3</span> 秒后释放</span><br><span class="line">Thread <span class="number">5</span> 占用ing</span><br><span class="line">Thread <span class="number">4</span> 占用ing</span><br><span class="line">Thread <span class="number">5</span> 占用<span class="number">3</span> 秒后释放</span><br><span class="line">Thread <span class="number">4</span> 占用<span class="number">3</span> 秒后释放</span><br></pre></td></tr></table></figure></p>
+<h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>以上就是JUC四大常用并发类的简单解释于简单用法，如果想要获取和了解更多高级用法，请手动Google和百度哦~</p>
 
       
     </div>
@@ -571,7 +570,7 @@
     </li>
     <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/" title="jvm(6):Java服务GC参数调优案例">https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/</a>
+      <a href="https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/" title="JUC四大并发类的简单介绍">https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/</a>
     </li>
     <li class="post-copyright-license">
       <strong>版权声明： </strong>
@@ -587,7 +586,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JVM/" rel="tag"># JVM</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -600,8 +599,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/27/jvm-5-Java-GC-分析/" rel="next" title="jvm(5):Java GC 分析">
-                <i class="fa fa-chevron-left"></i> jvm(5):Java GC 分析
+              <a href="/2018/08/06/Github停用TLS-1-0和TLS-1-1引起的血案/" rel="next" title="Github停用TLS 1.0和TLS 1.1引起的血案">
+                <i class="fa fa-chevron-left"></i> Github停用TLS 1.0和TLS 1.1引起的血案
               </a>
             
           </div>
@@ -609,10 +608,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/27/jvm-7-jvm调优-工具篇/" rel="prev" title="jvm(7):jvm调优-工具篇">
-                jvm(7):jvm调优-工具篇 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -823,7 +818,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景以及遇到的问题"><span class="nav-number">1.</span> <span class="nav-text">背景以及遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题解决过程"><span class="nav-number">2.</span> <span class="nav-text">问题解决过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#排除应用程序的内存使用问题"><span class="nav-number">2.1.</span> <span class="nav-text">排除应用程序的内存使用问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排除Cache内容过多的问题"><span class="nav-number">2.2.</span> <span class="nav-text">排除Cache内容过多的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调整GC时间点（成功率抖动问题加重）"><span class="nav-number">2.3.</span> <span class="nav-text">调整GC时间点（成功率抖动问题加重）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调整对象在年轻代内存中驻留的时间（效果不明显）"><span class="nav-number">2.4.</span> <span class="nav-text">调整对象在年轻代内存中驻留的时间（效果不明显）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CyclicBarrier"><span class="nav-number">2.</span> <span class="nav-text">CyclicBarrier</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Future"><span class="nav-number">3.</span> <span class="nav-text">Future</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Semaphore"><span class="nav-number">4.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结语"><span class="nav-number">5.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
 
           </div>
@@ -1002,9 +997,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'https://faithlove.github.io/2017/10/27/jvm-6-Java服务GC参数调优案例/';
-          this.page.identifier = '2017/10/27/jvm-6-Java服务GC参数调优案例/';
-          this.page.title = 'jvm(6):Java服务GC参数调优案例';
+          this.page.url = 'https://faithlove.github.io/2018/08/10/JUC四大并发类的简单介绍/';
+          this.page.identifier = '2018/08/10/JUC四大并发类的简单介绍/';
+          this.page.title = 'JUC四大并发类的简单介绍';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://sarience-github-io.disqus.com/embed.js';
