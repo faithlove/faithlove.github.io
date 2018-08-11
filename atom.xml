@@ -218,7 +218,7 @@
     <link href="https://faithlove.github.io/2018/01/30/Android-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"/>
     <id>https://faithlove.github.io/2018/01/30/Android-内存泄漏/</id>
     <published>2018-01-30T02:27:13.000Z</published>
-    <updated>2018-01-30T02:46:05.374Z</updated>
+    <updated>2018-08-11T14:29:44.751Z</updated>
     
     <content type="html"><![CDATA[<p>Android内存泄漏是一个经常要遇到的问题，程序在内存泄漏的时候很容易导致OOM的发生。那么如何查找内存泄漏和避免内存泄漏就是需要知晓的一个问题，首先我们需要知道一些基础知识。</p>
 <h2 id="Java的四种引用"><a href="#Java的四种引用" class="headerlink" title="Java的四种引用"></a>Java的四种引用</h2><p><strong>强引用</strong>: 强引用是Java中最普通的引用，随意创建一个对象然后在其他的地方引用一下，就是强引用，强引用的对象Java宁愿OOM也不会回收他</p>
@@ -276,7 +276,7 @@
     <link href="https://faithlove.github.io/2017/12/06/Java-8%E7%B3%BB%E5%88%97%E4%B9%8B%E9%87%8D%E6%96%B0%E8%AE%A4%E8%AF%86HashMap/"/>
     <id>https://faithlove.github.io/2017/12/06/Java-8系列之重新认识HashMap/</id>
     <published>2017-12-06T03:42:48.000Z</published>
-    <updated>2017-12-06T07:46:36.202Z</updated>
+    <updated>2018-08-11T14:31:20.781Z</updated>
     
     <content type="html"><![CDATA[<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>HashMap是Java程序员使用频率最高的用于映射(键值对)处理的数据类型。随着JDK（Java Developmet Kit）版本的更新，JDK1.8对HashMap底层的实现进行了优化，例如引入红黑树的数据结构和扩容的优化等。本文结合JDK1.7和JDK1.8的区别，深入探讨HashMap的结构实现和功能原理。</p>
 <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Java为数据结构中的映射定义了一个接口java.util.Map，此接口主要有四个常用的实现类，分别是HashMap、Hashtable、LinkedHashMap和TreeMap，类继承关系如下图所示：<br><img src="https://faithlove.github.io/pic/java/hashmap/java.util.map类图.png" alt=""></p>
