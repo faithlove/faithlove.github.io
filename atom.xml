@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://faithlove.github.io/"/>
-  <updated>2018-08-13T10:47:55.934Z</updated>
+  <updated>2018-08-22T02:19:37.455Z</updated>
   <id>https://faithlove.github.io/</id>
   
   <author>
@@ -14,6 +14,24 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从Java内存模型讲双重检查锁原理</title>
+    <link href="https://faithlove.github.io/2018/08/22/%E4%BB%8EJava%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E8%AE%B2%E5%8F%8C%E9%87%8D%E6%A3%80%E6%9F%A5%E9%94%81%E5%8E%9F%E7%90%86/"/>
+    <id>https://faithlove.github.io/2018/08/22/从Java内存模型讲双重检查锁原理/</id>
+    <published>2018-08-22T02:13:41.000Z</published>
+    <updated>2018-08-22T02:19:37.455Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="Java" scheme="https://faithlove.github.io/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="https://faithlove.github.io/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>Java静态代理、动态代理与Kotlin委托模式的简单解析</title>
