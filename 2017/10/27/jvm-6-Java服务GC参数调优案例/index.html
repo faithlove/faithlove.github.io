@@ -618,7 +618,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="https://faithlove.github.io/pic/2017/jvm/topPicPre6.jpg" rel="gallery_cjsindzlf0010bkuz9sxvt1jq"
+                 href="https://faithlove.github.io/pic/2017/jvm/topPicPre6.jpg" rel="gallery_cjt1t2w4m000sc0uz5btoni5h"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="https://faithlove.github.io/pic/2017/jvm/topPicPre6.jpg" itemprop="contentUrl"/>
               </a>
@@ -632,7 +632,7 @@
 
       
         <p>本文介绍了一次生产环境的JVM GC相关参数的调优过程，通过参数的调整避免了GC卡顿对JAVA服务成功率的影响。</p>
-<p>这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：<a href="https://segmentfault.com/a/1190000005174819" target="_blank" rel="noopener">Java服务GC参数调优案例</a>，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。</p>
+<p>这段时间在整理jvm系列的文章，无意中发现本文，作者思路清晰通过步步分析最终解决问题。我个人特别喜欢这种实战类的内容，经原作者的授权同意，将文章分享于此。原文链接：<span class="exturl" data-url="aHR0cHM6Ly9zZWdtZW50ZmF1bHQuY29tL2EvMTE5MDAwMDAwNTE3NDgxOQ==" title="https://segmentfault.com/a/1190000005174819">Java服务GC参数调优案例<i class="fa fa-external-link"></i></span>，下面为转载此文的内容，备注部分为本人添加，主要起到说明的作用。</p>
 <h2 id="背景以及遇到的问题"><a href="#背景以及遇到的问题" class="headerlink" title="背景以及遇到的问题"></a>背景以及遇到的问题</h2><p>我们的Java HTTP服务属于OLTP类型，对成功率和响应时间的要求比较高，在生产环境中出现偶现的成功率突然下降然后又自动恢复的情况，如图所示：</p>
 <p><img src="https://faithlove.github.io/pic/2017/jvm/articlex.png" alt=""></p>
 <p>JVM和GC相关的参数如下：</p>
@@ -653,8 +653,8 @@
 <p>调优以后效果很明显，下面是两台配置完全相同的服务器在同一时间段的成功率和响应时间监控图，第一个没有添加强制年轻代GC的参数。</p>
 <p><img src="https://faithlove.github.io/pic/2017/jvm/end1.png" alt=""><br><img src="https://faithlove.github.io/pic/2017/jvm/end2.png" alt=""></p>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>1、在CMS-remark阶段需要对堆中所有的内存对象进行处理，如果在这个阶段之前强制执行一次年轻代的GC会大量减少remark需要处理的内存数量，进而降低JVM卡顿对成功率的影响。<br>2、对于Java HTTP服务，JVM的卡顿时间应该小于HTTP客户端的调用超时时间，否则JVM卡顿会对成功率造成影响。</p>
-<p><strong>感谢<a href="http://www.jianshu.com/u/3def157aab07" target="_blank" rel="noopener">匠心零度</a>对文章内容进行深入的探讨，备注内容属于讨论后的结果</strong></p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://blog.csdn.net/historyasamirror/article/details/6245157" target="_blank" rel="noopener">JVM调优：选择合适的GC collector （三）</a><br><a href="https://blogs.oracle.com/poonam/entry/understanding_cms_gc_logs" target="_blank" rel="noopener">Understanding CMS GC Logs</a><br><a href="http://blog.sokolenko.me/2014/11/javavm-options-production.html" target="_blank" rel="noopener">Java VM Options You Should Always Use in Production</a>  </p>
+<p><strong>感谢<span class="exturl" data-url="aHR0cDovL3d3dy5qaWFuc2h1LmNvbS91LzNkZWYxNTdhYWIwNw==" title="http://www.jianshu.com/u/3def157aab07">匠心零度<i class="fa fa-external-link"></i></span>对文章内容进行深入的探讨，备注内容属于讨论后的结果</strong></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaGlzdG9yeWFzYW1pcnJvci9hcnRpY2xlL2RldGFpbHMvNjI0NTE1Nw==" title="http://blog.csdn.net/historyasamirror/article/details/6245157">JVM调优：选择合适的GC collector （三）<i class="fa fa-external-link"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly9ibG9ncy5vcmFjbGUuY29tL3Bvb25hbS9lbnRyeS91bmRlcnN0YW5kaW5nX2Ntc19nY19sb2dz" title="https://blogs.oracle.com/poonam/entry/understanding_cms_gc_logs">Understanding CMS GC Logs<i class="fa fa-external-link"></i></span><br><span class="exturl" data-url="aHR0cDovL2Jsb2cuc29rb2xlbmtvLm1lLzIwMTQvMTEvamF2YXZtLW9wdGlvbnMtcHJvZHVjdGlvbi5odG1s" title="http://blog.sokolenko.me/2014/11/javavm-options-production.html">Java VM Options You Should Always Use in Production<i class="fa fa-external-link"></i></span>  </p>
 
       
     </div>

@@ -618,7 +618,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="https://faithlove.github.io/pic/2017/jvm/topPicPre9.jpg" rel="gallery_cjsindzlk001dbkuze7lb19u6"
+                 href="https://faithlove.github.io/pic/2017/jvm/topPicPre9.jpg" rel="gallery_cjt1t2wbd001pc0uzg1hcdyms"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="https://faithlove.github.io/pic/2017/jvm/topPicPre9.jpg" itemprop="contentUrl"/>
               </a>
@@ -631,10 +631,10 @@
       
 
       
-        <p>本文由<a href="https://crowhawk.github.io/" target="_blank" rel="noopener">CrowHawk</a>翻译，地址：<a href="https://crowhawk.github.io/2017/08/21/jvm_4/" target="_blank" rel="noopener">如何优化Java GC「译」</a>，是Java GC调优的经典佳作。</p>
-<p>Sangmin Lee发表在<a href="http://www.cubrid.org/blog" target="_blank" rel="noopener">Cubrid</a>上的”Become a Java GC Expert”系列文章的第三篇<a href="http://www.cubrid.org/blog/how-to-tune-java-garbage-collection" target="_blank" rel="noopener">《How to Tune Java Garbage Collection》</a>,本文的作者是韩国人，写在JDK 1.8发布之前，虽然有些地方有些许过时，但整体内容还是非常有价值的。译者此前也看到有人翻译了本文，发现其中有许多错漏生硬和语焉不详之处，因此决定自己翻译一份，供大家分享。</p>
-<p>本文是“成为Java GC专家”系列文章的第三篇，在系列的第一篇文章<a href="http://www.cubrid.org/blog/understanding-java-garbage-collection" target="_blank" rel="noopener">《理解Java GC》</a>中，我们了解到了不同GC算法的执行过程、GC的工作原理、新生代和老年代的概念、JDK 7中你需要了解的5种GC类型以及每一种GC对性能的影响。</p>
-<p>在系列的第二篇文章<a href="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection" target="_blank" rel="noopener">《如何监控Java GC》</a>中笔者已经解释了JVM进行实时GC的原理、监控GC的方法以及可以使这一过程更加迅速高效的工具。</p>
+        <p>本文由<span class="exturl" data-url="aHR0cHM6Ly9jcm93aGF3ay5naXRodWIuaW8v" title="https://crowhawk.github.io/">CrowHawk<i class="fa fa-external-link"></i></span>翻译，地址：<span class="exturl" data-url="aHR0cHM6Ly9jcm93aGF3ay5naXRodWIuaW8vMjAxNy8wOC8yMS9qdm1fNC8=" title="https://crowhawk.github.io/2017/08/21/jvm_4/">如何优化Java GC「译」<i class="fa fa-external-link"></i></span>，是Java GC调优的经典佳作。</p>
+<p>Sangmin Lee发表在<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2c=" title="http://www.cubrid.org/blog">Cubrid<i class="fa fa-external-link"></i></span>上的”Become a Java GC Expert”系列文章的第三篇<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvaG93LXRvLXR1bmUtamF2YS1nYXJiYWdlLWNvbGxlY3Rpb24=" title="http://www.cubrid.org/blog/how-to-tune-java-garbage-collection">《How to Tune Java Garbage Collection》<i class="fa fa-external-link"></i></span>,本文的作者是韩国人，写在JDK 1.8发布之前，虽然有些地方有些许过时，但整体内容还是非常有价值的。译者此前也看到有人翻译了本文，发现其中有许多错漏生硬和语焉不详之处，因此决定自己翻译一份，供大家分享。</p>
+<p>本文是“成为Java GC专家”系列文章的第三篇，在系列的第一篇文章<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvdW5kZXJzdGFuZGluZy1qYXZhLWdhcmJhZ2UtY29sbGVjdGlvbg==" title="http://www.cubrid.org/blog/understanding-java-garbage-collection">《理解Java GC》<i class="fa fa-external-link"></i></span>中，我们了解到了不同GC算法的执行过程、GC的工作原理、新生代和老年代的概念、JDK 7中你需要了解的5种GC类型以及每一种GC对性能的影响。</p>
+<p>在系列的第二篇文章<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvaG93LXRvLW1vbml0b3ItamF2YS1nYXJiYWdlLWNvbGxlY3Rpb24=" title="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection">《如何监控Java GC》<i class="fa fa-external-link"></i></span>中笔者已经解释了JVM进行实时GC的原理、监控GC的方法以及可以使这一过程更加迅速高效的工具。</p>
 <p>在第三篇文章中，笔者将基于实际生产环境中的案例，介绍几个GC优化的最佳参数设置。在此我们假设你已经理解了本系列前两篇文章的内容，因此为了更深入的理解本文所讲内容，我建议你在阅读本篇文章之前先仔细阅读这两篇文章。</p>
 <h2 id="GC优化是必要的吗？"><a href="#GC优化是必要的吗？" class="headerlink" title="GC优化是必要的吗？"></a>GC优化是必要的吗？</h2><p>或者更准确地说，GC优化对Java基础服务来说是必要的吗？答案是否定的，事实上GC优化对Java基础服务来说在有些场合是可以省去的，但前提是这些正在运行的Java系统，必须包含以下参数或行为：</p>
 <ul>
@@ -664,7 +664,7 @@
 <li>另外，如果<strong>通过增加老年代内存来降低Full GC的频率</strong>，Full GC的时间可能因此增加。</li>
 </ul>
 <p>因此，<strong>你需要把老年代的大小设置成一个“合适”的值</strong>。</p>
-<h2 id="影响GC性能的参数"><a href="#影响GC性能的参数" class="headerlink" title="影响GC性能的参数"></a>影响GC性能的参数</h2><p>正如我在系列的第一篇文章<a href="http://www.cubrid.org/blog/understanding-java-garbage-collection" target="_blank" rel="noopener">《理解Java GC》</a>末尾提到的，不要幻想着“如果有人用他设置的GC参数获取了不错的性能，我们为什么不复制他的参数设置呢？”，因为对于不用的Web服务，它们创建的对象大小和生命周期都不相同。</p>
+<h2 id="影响GC性能的参数"><a href="#影响GC性能的参数" class="headerlink" title="影响GC性能的参数"></a>影响GC性能的参数</h2><p>正如我在系列的第一篇文章<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvdW5kZXJzdGFuZGluZy1qYXZhLWdhcmJhZ2UtY29sbGVjdGlvbg==" title="http://www.cubrid.org/blog/understanding-java-garbage-collection">《理解Java GC》<i class="fa fa-external-link"></i></span>末尾提到的，不要幻想着“如果有人用他设置的GC参数获取了不错的性能，我们为什么不复制他的参数设置呢？”，因为对于不用的Web服务，它们创建的对象大小和生命周期都不相同。</p>
 <p>举一个简单的例子，如果一个任务的执行条件是A，B，C，D和E，另一个完全相同的任务执行条件只有A和B，那么哪一个任务执行速度更快呢？作为常识来讲，答案很明显是后者。</p>
 <p>Java GC参数的设置也是这个道理，设置好几个参数并不会提升GC执行的速度，反而会使它变得更慢。<strong>GC优化的基本原则</strong>是将不同的GC参数应用到两个及以上的服务器上然后比较它们的性能，然后将那些被证明可以提高性能或减少GC执行时间的参数应用于最终的工作服务器上。</p>
 <p>下面这张表展示了与内存大小相关且会影响GC性能的GC参数</p>
@@ -708,7 +708,7 @@
 </table>
 <p>笔者在进行GC优化时最常用的参数是<code>-Xms</code>,<code>-Xmx</code>和<code>-XX:NewRatio</code>。<code>-Xms</code>和<code>-Xmx</code>参数通常是必须的，所以<code>NewRatio</code>的值将对GC性能产生重要的影响。</p>
 <p>有些人可能会问<strong>如何设置永久代内存大小</strong>，你可以用<code>-XX:PermSize</code>和<code>-XX:MaxPermSize</code>参数来进行设置，但是要记住，只有当出现<code>OutOfMemoryError</code>错误时你才需要去设置永久代内存。</p>
-<p>还有一个会影响GC性能的因素是<a href="https://crowhawk.github.io/2017/08/15/jvm_3/" target="_blank" rel="noopener">垃圾收集器的类型</a>,下表展示了关于GC类型的可选参数（基于JDK 6.0）：</p>
+<p>还有一个会影响GC性能的因素是<span class="exturl" data-url="aHR0cHM6Ly9jcm93aGF3ay5naXRodWIuaW8vMjAxNy8wOC8xNS9qdm1fMy8=" title="https://crowhawk.github.io/2017/08/15/jvm_3/">垃圾收集器的类型<i class="fa fa-external-link"></i></span>,下表展示了关于GC类型的可选参数（基于JDK 6.0）：</p>
 <center><strong>表2：GC类型可选参数</strong></center>
 
 <table>
@@ -746,19 +746,19 @@
 <p>除了G1收集器外，可以通过设置上表中每种类型第一行的参数来切换GC类型，最常见的非侵入式GC就是Serial GC，它针对客户端系统进行了特别的优化。</p>
 <p>会影响GC性能的参数还有很多，但是上述的参数会带来最显著的效果，请切记，设置太多的参数并不一定会提升GC的性能。</p>
 <h2 id="GC优化的过程"><a href="#GC优化的过程" class="headerlink" title="GC优化的过程"></a>GC优化的过程</h2><p>GC优化的过程和大多数常见的提升性能的过程相似，下面是笔者使用的流程：</p>
-<h3 id="1-监控GC状态"><a href="#1-监控GC状态" class="headerlink" title="1.监控GC状态"></a>1.监控GC状态</h3><p>你需要监控GC从而检查系统中运行的GC的各种状态，具体方法请查看系列的第二篇文章<a href="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection" target="_blank" rel="noopener">《如何监控Java GC》</a></p>
+<h3 id="1-监控GC状态"><a href="#1-监控GC状态" class="headerlink" title="1.监控GC状态"></a>1.监控GC状态</h3><p>你需要监控GC从而检查系统中运行的GC的各种状态，具体方法请查看系列的第二篇文章<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvaG93LXRvLW1vbml0b3ItamF2YS1nYXJiYWdlLWNvbGxlY3Rpb24=" title="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection">《如何监控Java GC》<i class="fa fa-external-link"></i></span></p>
 <h3 id="2-分析监控结果后决定是否需要优化GC"><a href="#2-分析监控结果后决定是否需要优化GC" class="headerlink" title="2.分析监控结果后决定是否需要优化GC"></a>2.分析监控结果后决定是否需要优化GC</h3><p>在检查GC状态后，你需要分析监控结构并决定是否需要进行GC优化。如果分析结果显示运行GC的时间只有0.1-0.3秒，那么就不需要把时间浪费在GC优化上，但如果运行GC的时间达到1-3秒，甚至大于10秒，那么GC优化将是很有必要的。</p>
 <p>但是，如果你已经分配了大约10GB内存给Java，并且这些内存无法省下，那么就无法进行GC优化了。在进行GC优化之前，你需要考虑为什么你需要分配这么大的内存空间，如果你分配了1GB或2GB大小的内存并且出现了<code>OutOfMemoryError</code>，那你就应该执行<strong>堆转储（heap dump）</strong>来消除导致异常的原因。</p>
 <blockquote>
 <p>注意：</p>
 <p><strong>堆转储（heap dump）</strong>是一个用来检查Java内存中的对象和数据的内存文件。该文件可以通过执行JDK中的<code>jmap</code>命令来创建。在创建文件的过程中，所有Java程序都将暂停，因此，不要再系统执行过程中创建该文件。</p>
-<p>你可以在互联网上搜索heap dump的详细说明。对于韩国读者，可以直接参考我去年发布的书：<a href="http://book.naver.com/bookdb/book_detail.nhn?bid=6654751" target="_blank" rel="noopener">《The story of troubleshooting for Java developers and system operators》</a> (Sangmin Lee, Hanbit Media, 2011, 416 pages)</p>
+<p>你可以在互联网上搜索heap dump的详细说明。对于韩国读者，可以直接参考我去年发布的书：<span class="exturl" data-url="aHR0cDovL2Jvb2submF2ZXIuY29tL2Jvb2tkYi9ib29rX2RldGFpbC5uaG4/YmlkPTY2NTQ3NTE=" title="http://book.naver.com/bookdb/book_detail.nhn?bid=6654751">《The story of troubleshooting for Java developers and system operators》<i class="fa fa-external-link"></i></span> (Sangmin Lee, Hanbit Media, 2011, 416 pages)</p>
 </blockquote>
 <h3 id="3-设置GC类型-内存大小"><a href="#3-设置GC类型-内存大小" class="headerlink" title="3.设置GC类型/内存大小"></a>3.设置GC类型/内存大小</h3><p>如果你决定要进行GC优化，那么你需要选择一个GC类型并且为它设置内存大小。此时如果你有多个服务器，请如上文提到的那样，在每台机器上设置不同的GC参数并分析它们的区别。</p>
 <h3 id="4-分析结果"><a href="#4-分析结果" class="headerlink" title="4.分析结果"></a>4.分析结果</h3><p>在设置完GC参数后就可以开始收集数据，请在收集至少24小时后再进行结果分析。如果你足够幸运，你可能会找到系统的最佳GC参数。如若不然，你还需要分析输出日志并检查分配的内存，然后需要通过不断调整GC类型/内存大小来找到系统的最佳参数。</p>
 <h3 id="5-如果结果令人满意，将参数应用到所有服务器上并结束GC优化"><a href="#5-如果结果令人满意，将参数应用到所有服务器上并结束GC优化" class="headerlink" title="5.如果结果令人满意，将参数应用到所有服务器上并结束GC优化"></a>5.如果结果令人满意，将参数应用到所有服务器上并结束GC优化</h3><p>如果GC优化的结果令人满意，就可以将参数应用到所有服务器上，并停止GC优化。</p>
 <p>在下面的章节中，你将会看到上述每一步所做的具体工作。</p>
-<h2 id="监控GC状态并分析结果"><a href="#监控GC状态并分析结果" class="headerlink" title="监控GC状态并分析结果"></a>监控GC状态并分析结果</h2><p>在运行中的Web应用服务器（Web Application Server,WAS）上查看GC状态的最佳方式就是使用<code>jstat</code>命令。笔者在<a href="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection" target="_blank" rel="noopener">《如何监控Java GC》</a>中已经介绍过了<code>jstat</code>命令，所以在本篇文章中我将着重关注数据部分。</p>
+<h2 id="监控GC状态并分析结果"><a href="#监控GC状态并分析结果" class="headerlink" title="监控GC状态并分析结果"></a>监控GC状态并分析结果</h2><p>在运行中的Web应用服务器（Web Application Server,WAS）上查看GC状态的最佳方式就是使用<code>jstat</code>命令。笔者在<span class="exturl" data-url="aHR0cDovL3d3dy5jdWJyaWQub3JnL2Jsb2cvaG93LXRvLW1vbml0b3ItamF2YS1nYXJiYWdlLWNvbGxlY3Rpb24=" title="http://www.cubrid.org/blog/how-to-monitor-java-garbage-collection">《如何监控Java GC》<i class="fa fa-external-link"></i></span>中已经介绍过了<code>jstat</code>命令，所以在本篇文章中我将着重关注数据部分。</p>
 <p>下面的例子展示了某个还没有执行GC优化的JVM的状态（虽然它并不是运行服务器）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ jstat -gcutil 21719 1s</span><br><span class="line">S0    S1    E    O    P    YGC    YGCT    FGC    FGCT GCT</span><br><span class="line">48.66 0.00 48.10 49.70 77.45 3428 172.623 3 59.050 231.673</span><br><span class="line">48.66 0.00 48.10 49.70 77.45 3428 172.623 3 59.050 231.673</span><br></pre></td></tr></table></figure>
 <p>我们先看一下YGC（从应用程序启动到采样时发生 Young GC 的次数）和YGCT（从应用程序启动到采样时 Young GC 所用的时间(秒)），计算YGCT/YGC会得出，平均每次新生代的GC耗时50ms，这是一个很小的数字，通过这个结果可以看出，我们大可不必关注新生代GC对GC性能的影响。</p>
@@ -778,9 +778,9 @@
 <big><strong>Concurrent mode failure</strong></big>
 
 <p>现在让我们来深入地了解一下<strong>concurrent mode failure</strong>。</p>
-<p>并行GC和CMS GC的最大区别是并行GC采用“标记-整理”(Mark-Compact)算法而CMS GC采用“标记-清除”(Mark-Sweep)算法（具体内容可参照译者的文章<a href="https://crowhawk.github.io/2017/08/10/jvm_2/" target="_blank" rel="noopener">《GC算法与内存分配策略》</a>）,compact步骤就是通过移动内存来消除内存碎片，从而消除分配的内存之间的空白区域。</p>
+<p>并行GC和CMS GC的最大区别是并行GC采用“标记-整理”(Mark-Compact)算法而CMS GC采用“标记-清除”(Mark-Sweep)算法（具体内容可参照译者的文章<span class="exturl" data-url="aHR0cHM6Ly9jcm93aGF3ay5naXRodWIuaW8vMjAxNy8wOC8xMC9qdm1fMi8=" title="https://crowhawk.github.io/2017/08/10/jvm_2/">《GC算法与内存分配策略》<i class="fa fa-external-link"></i></span>）,compact步骤就是通过移动内存来消除内存碎片，从而消除分配的内存之间的空白区域。</p>
 <p>对于并行GC来说，无论何时执行Full GC，都会进行compact工作，这消耗了太多的时间。不过在执行完Full GC后，下次内存分配将会变得更快（因为直接顺序分配相邻的内存）。</p>
-<p>相反，CMS GC没有compact的过程，因此CMS GC运行的速度更快。但是也是由于没有整理内存，在进行磁盘清理之前，内存中会有很多零碎的空白区域，这也导致没有足够的空间分配给大对象。例如，在老年代还有300MB可用空间，但是连一个10MB的对象都没有办法被顺序存储在老年代中，在这种情况下，会报出<strong>“concurrent mode failure”</strong>的warning，然后系统执行compact操作。但是CMS GC在这种情况下执行的compact操作耗时要比并行GC高很多，并且这还会导致另一个问题，关于<strong>“concurrent mode failure”</strong>的详细说明，可用参考Oracle工程师撰写的<a href="https://blogs.oracle.com/poonam/understanding-cms-gc-logs" target="_blank" rel="noopener">《Understanding CMS GC Logs》</a>。</p>
+<p>相反，CMS GC没有compact的过程，因此CMS GC运行的速度更快。但是也是由于没有整理内存，在进行磁盘清理之前，内存中会有很多零碎的空白区域，这也导致没有足够的空间分配给大对象。例如，在老年代还有300MB可用空间，但是连一个10MB的对象都没有办法被顺序存储在老年代中，在这种情况下，会报出<strong>“concurrent mode failure”</strong>的warning，然后系统执行compact操作。但是CMS GC在这种情况下执行的compact操作耗时要比并行GC高很多，并且这还会导致另一个问题，关于<strong>“concurrent mode failure”</strong>的详细说明，可用参考Oracle工程师撰写的<span class="exturl" data-url="aHR0cHM6Ly9ibG9ncy5vcmFjbGUuY29tL3Bvb25hbS91bmRlcnN0YW5kaW5nLWNtcy1nYy1sb2dz" title="https://blogs.oracle.com/poonam/understanding-cms-gc-logs">《Understanding CMS GC Logs》<i class="fa fa-external-link"></i></span>。</p>
 <p>综上所述，你需要根据你的系统情况为其选择一个最适合的GC类型。</p>
 <p>每个系统都有最适合它的GC类型等着你去寻找，如果你有6台服务器，我建议你每两个服务器设置相同的参数，然后加上<code>-verbosegc</code>参数再分析结果。</p>
 <h3 id="设置内存大小"><a href="#设置内存大小" class="headerlink" title="设置内存大小"></a>设置内存大小</h3><p>下面展示了内存大小、GC运行次数和GC运行时间之间的关系：</p>
@@ -903,7 +903,7 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>笔者没有执行heap dump并分析内存的详细内容，而是通过自己的经验进行GC优化。精确地分析内存可以得到更好的优化效果，不过这种分析一般只适用于内存使用量相对固定的场景。如果服务严重过载并占有了大量的内存，则建议你根据之前的经验进行GC优化。</p>
 <p>笔者已经在一些服务上设置了G1 GC参数并进行了性能测试，但还没有应用于正式的生产环境。G1 GC的速度快于任何其他的GC类型，但是你必须要升级到JDK 7。此外，暂时还无法保证它的稳定性，没有人知道运行时是否会出现致命的错误，因此G1<br>GC暂时还不适合投入应用。</p>
 <p>等未来JDK 7真正稳定了（这并不是说它现在不稳定），并且WAS针对JDK 7进行优化后，G1 GC最终能按照预期的那样来工作，等到那一天我们可能就不再需要GC优化了。</p>
-<p>想了解关于GC优化的更多细节，请前往<a href="https://www.slideshare.net/" target="_blank" rel="noopener">Slideshare.com</a> 查看相关资料。强烈推荐<a href="https://www.slideshare.net/aszegedi/everything-i-ever-learned-about-jvm-performance-tuning-twitter" target="_blank" rel="noopener">Everything I Ever Learned About JVM Performance Tuning @Twitter</a>,作者是Attila Szegedi, 一名Twitter工程师，请花些时间好好阅读它。</p>
+<p>想了解关于GC优化的更多细节，请前往<span class="exturl" data-url="aHR0cHM6Ly93d3cuc2xpZGVzaGFyZS5uZXQv" title="https://www.slideshare.net/">Slideshare.com<i class="fa fa-external-link"></i></span> 查看相关资料。强烈推荐<span class="exturl" data-url="aHR0cHM6Ly93d3cuc2xpZGVzaGFyZS5uZXQvYXN6ZWdlZGkvZXZlcnl0aGluZy1pLWV2ZXItbGVhcm5lZC1hYm91dC1qdm0tcGVyZm9ybWFuY2UtdHVuaW5nLXR3aXR0ZXI=" title="https://www.slideshare.net/aszegedi/everything-i-ever-learned-about-jvm-performance-tuning-twitter">Everything I Ever Learned About JVM Performance Tuning @Twitter<i class="fa fa-external-link"></i></span>,作者是Attila Szegedi, 一名Twitter工程师，请花些时间好好阅读它。</p>
 
       
     </div>

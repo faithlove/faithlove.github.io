@@ -618,7 +618,7 @@
           
             <div class="post-gallery-row">
               <a class="post-gallery-img fancybox"
-                 href="https://faithlove.github.io/pic/2018/HashMap/topPicPre.jpg" rel="gallery_cjsindzl3000kbkuz24iwqf4c"
+                 href="https://faithlove.github.io/pic/2018/HashMap/topPicPre.jpg" rel="gallery_cjt1t2w4f000fc0uzhccijodn"
                  itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
                 <img src="https://faithlove.github.io/pic/2018/HashMap/topPicPre.jpg" itemprop="contentUrl"/>
               </a>
@@ -662,8 +662,8 @@
 <p> 首先，Node[] table的初始化长度length(默认值是16)，Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor。也就是说，在数组定义好长度之后，负载因子越大，所能容纳的键值对个数越多。</p>
 <p> 结合负载因子的定义公式可知，threshold就是在此Load factor和length(数组长度)对应下允许的最大元素数目，超过这个数目就重新resize(扩容)，扩容后的HashMap容量是之前容量的两倍。默认的负载因子0.75是对空间和时间效率的一个平衡选择，建议大家不要修改，除非在时间和空间比较特殊的情况下，如果内存空间很多而又对时间效率要求很高，可以降低负载因子Load factor的值；相反，如果内存空间紧张而对时间效率要求不高，可以增加负载因子loadFactor的值，这个值可以大于1。</p>
 <p> size这个字段其实很好理解，就是HashMap中实际存在的键值对数量。注意和table的长度length、容纳最大键值对数量threshold的区别。而modCount字段主要用来记录HashMap内部结构发生变化的次数，主要用于迭代的快速失败。强调一点，内部结构发生变化指的是结构发生变化，例如put新键值对，但是某个key对应的value值被覆盖不属于结构变化。</p>
-<p> 在HashMap中，哈希桶数组table的长度length大小必须为2的n次方(一定是合数)，这是一种非常规的设计，常规的设计是把桶的大小设计为素数。相对来说素数导致冲突的概率要小于合数，具体证明可以参考<a href="http://blog.csdn.net/liuqiyao_01/article/details/14475159，Hashtable初始化桶大小为11，就是桶大小设计为素数的应用（Hashtable扩容后不能保证还是素数）。HashMap采用这种非常规设计，主要是为了在取模和扩容时做优化，同时为了减少冲突，HashMap定位哈希桶索引位置时，也加入了高位参与运算的过程。" target="_blank" rel="noopener">http://blog.csdn.net/liuqiyao_01/article/details/14475159，Hashtable初始化桶大小为11，就是桶大小设计为素数的应用（Hashtable扩容后不能保证还是素数）。HashMap采用这种非常规设计，主要是为了在取模和扩容时做优化，同时为了减少冲突，HashMap定位哈希桶索引位置时，也加入了高位参与运算的过程。</a></p>
-<p> 这里存在一个问题，即使负载因子和Hash算法设计的再合理，也免不了会出现拉链过长的情况，一旦出现拉链过长，则会严重影响HashMap的性能。于是，在JDK1.8版本中，对数据结构做了进一步的优化，引入了红黑树。而当链表长度太长（默认超过8）时，链表就转换为红黑树，利用红黑树快速增删改查的特点提高HashMap的性能，其中会用到红黑树的插入、删除、查找等算法。本文不再对红黑树展开讨论，想了解更多红黑树数据结构的工作原理可以参考<a href="http://blog.csdn.net/v_july_v/article/details/6105630。" target="_blank" rel="noopener">http://blog.csdn.net/v_july_v/article/details/6105630。</a></p>
+<p> 在HashMap中，哈希桶数组table的长度length大小必须为2的n次方(一定是合数)，这是一种非常规的设计，常规的设计是把桶的大小设计为素数。相对来说素数导致冲突的概率要小于合数，具体证明可以参考<span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGl1cWl5YW9fMDEvYXJ0aWNsZS9kZXRhaWxzLzE0NDc1MTU577yMSGFzaHRhYmxl5Yid5aeL5YyW5qG25aSn5bCP5Li6MTHvvIzlsLHmmK/mobblpKflsI/orr7orqHkuLrntKDmlbDnmoTlupTnlKjvvIhIYXNodGFibGXmianlrrnlkI7kuI3og73kv53or4Hov5jmmK/ntKDmlbDvvInjgIJIYXNoTWFw6YeH55So6L+Z56eN6Z2e5bi46KeE6K6+6K6h77yM5Li76KaB5piv5Li65LqG5Zyo5Y+W5qih5ZKM5omp5a655pe25YGa5LyY5YyW77yM5ZCM5pe25Li65LqG5YeP5bCR5Yay56qB77yMSGFzaE1hcOWumuS9jeWTiOW4jOahtue0ouW8leS9jee9ruaXtu+8jOS5n+WKoOWFpeS6humrmOS9jeWPguS4jui/kOeul+eahOi/h+eoi+OAgg==" title="http://blog.csdn.net/liuqiyao_01/article/details/14475159，Hashtable初始化桶大小为11，就是桶大小设计为素数的应用（Hashtable扩容后不能保证还是素数）。HashMap采用这种非常规设计，主要是为了在取模和扩容时做优化，同时为了减少冲突，HashMap定位哈希桶索引位置时，也加入了高位参与运算的过程。">http://blog.csdn.net/liuqiyao_01/article/details/14475159，Hashtable初始化桶大小为11，就是桶大小设计为素数的应用（Hashtable扩容后不能保证还是素数）。HashMap采用这种非常规设计，主要是为了在取模和扩容时做优化，同时为了减少冲突，HashMap定位哈希桶索引位置时，也加入了高位参与运算的过程。<i class="fa fa-external-link"></i></span></p>
+<p> 这里存在一个问题，即使负载因子和Hash算法设计的再合理，也免不了会出现拉链过长的情况，一旦出现拉链过长，则会严重影响HashMap的性能。于是，在JDK1.8版本中，对数据结构做了进一步的优化，引入了红黑树。而当链表长度太长（默认超过8）时，链表就转换为红黑树，利用红黑树快速增删改查的特点提高HashMap的性能，其中会用到红黑树的插入、删除、查找等算法。本文不再对红黑树展开讨论，想了解更多红黑树数据结构的工作原理可以参考<span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdl9qdWx5X3YvYXJ0aWNsZS9kZXRhaWxzLzYxMDU2MzDjgII=" title="http://blog.csdn.net/v_july_v/article/details/6105630。">http://blog.csdn.net/v_july_v/article/details/6105630。<i class="fa fa-external-link"></i></span></p>
 </li>
 </ol>
 <h3 id="功能实现-方法"><a href="#功能实现-方法" class="headerlink" title="功能实现-方法"></a>功能实现-方法</h3><p>HashMap的内部功能实现很多，本文主要从根据key获取哈希桶数组索引位置、put方法的详细执行、扩容过程三个具有代表性的点深入展开讲解。</p>
